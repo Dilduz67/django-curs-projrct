@@ -41,6 +41,7 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
 
 class ArticleListView(LoginRequiredMixin, ListView):
     model = Article
+    template_name = 'blog/article_list.html'
 
 
 class ArticleDetailView(LoginRequiredMixin, DetailView):
