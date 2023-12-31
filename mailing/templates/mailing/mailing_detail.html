@@ -29,5 +29,8 @@
             {% endfor %}
         </div>
     </div>
+    {% for message in messages %}
+        <p>Message ID: {{ message.id }}</p>
+    {% endfor %}
 </div>
 {% endblock %}

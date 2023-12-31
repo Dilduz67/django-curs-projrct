@@ -1,11 +1,13 @@
 from django.db import models
 from django.utils import timezone
 from users.models import User, NULLABLE
-
+from django.conf import settings
 
 class Message(models.Model):
     theme = models.CharField(max_length=150, verbose_name='тема сообщения')
-    body = models.TextField()
+    body = models.TextField(verbose_name='содержание')
+    #mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, **NULLABLE,)
+    user = models.ForeignKey(User, verbose_name='пользователь', on_delete=models.CASCADE, **NULLABLE)
 
     def __str__(self):
         return f"{self.theme}"
@@ -13,7 +15,6 @@ class Message(models.Model):
     class Meta:
         verbose_name = "Сообщение"
         verbose_name_plural = 'Сообщения'
-
 
 class Mailing(models.Model):
     TITLE_CHOICES_PERIODICITY = [
@@ -55,3 +56,4 @@ class Log(models.Model):
     class Meta:
         verbose_name = 'Лог'
         verbose_name_plural = 'Логи'
+

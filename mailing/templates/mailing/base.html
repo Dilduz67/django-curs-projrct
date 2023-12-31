@@ -26,16 +26,19 @@
                                     <a class="nav-link"  href="{% url 'mailing:list' %}">Список рассылки</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link"  href="{% url 'mailing:message_list' %}">Сообщения</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" href="{% url 'client:list' %}" >Клиенты</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'blog:list' %}" >Блог</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'users:logout' %}" >Выйти</a>
+                                    <a class="nav-link" href="{% url 'users:profile' %}" >Профиль</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'users:profile' %}" >Профиль</a>
+                                    <a class="nav-link" href="{% url 'users:logout' %}" >Выйти</a>
                                 </li>
                             {% else %}
                                 <li class="nav-item">

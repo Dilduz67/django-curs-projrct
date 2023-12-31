@@ -7,15 +7,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.core.mail import send_mail
 
 from blog.models import Article
 from client.models import Client
-from mailing.forms import MailingForms
-from mailing.models import Mailing, Log
+from mailing.forms import MailingForms, MessageForms
+from mailing.models import Mailing, Log, Message
 
 
 class MailingListView(LoginRequiredMixin, ListView):
@@ -111,7 +111,33 @@ class MailingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
     permission_required = 'mailing.delete_mailing'
     success_url = reverse_lazy('mailing:list')
 
+class MessageListView(ListView):
+    model = Message
+    template_name = 'mailing/message_list.html'
+    #context_object_name = 'messages'
 
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
+
+
+class MessageCreateView(LoginRequiredMixin, CreateView):
+    model = Message
+    form_class = MessageForms
+    template_name = 'mailing/create_message.html'
+    success_url = reverse_lazy('mailing:message_list')
+
+class MessageUpdateView(LoginRequiredMixin, UpdateView):
+    model = Message
+    form_class = MessageForms
+    template_name = 'mailing/message_form.html'
+    success_url = reverse_lazy('mailing:message_list')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+class MessageDeleteView(LoginRequiredMixin, DeleteView):
+    model = Message
+    success_url = reverse_lazy('mailing:message_list')
 
 
 
