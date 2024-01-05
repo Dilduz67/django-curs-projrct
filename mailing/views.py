@@ -21,9 +21,10 @@ from mailing.models import Mailing, Log, Message
 class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
     template_name = 'mailing/mailing_list.html'
+    queryset = Mailing.objects.all()
 
-    def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
+    #def get_queryset(self):
+    #    return super().get_queryset().filter(user=self.request.user)
 
 
 class MailingDetailView(LoginRequiredMixin, DetailView):
@@ -64,8 +65,8 @@ def main(request):
 class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForms
-    permission_required = 'mailing.add_mailing'
     success_url = reverse_lazy('mailing:list')
+    permission_required = 'mailing.add_mailing'
 
     def form_valid(self, form):
         tz = pytz.timezone('Europe/Moscow')
@@ -73,8 +74,8 @@ class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         new_mailing = form.save()
 
         if new_mailing.mailing_time <= datetime.now(tz):
-            mail_subject = new_mailing.massage.body if new_mailing.massage is not None else 'Рассылка'
-            message = new_mailing.massage.theme if new_mailing.massage is not None else 'Вам назначена рассылка'
+            mail_subject = new_mailing.message.body if new_mailing.message is not None else 'Рассылка'
+            message = new_mailing.message.theme if new_mailing.message is not None else 'Вам назначена рассылка'
             try:
                 send_mail(mail_subject, message, settings.EMAIL_HOST_USER, clients)
                 log = Log.objects.create(date_attempt=datetime.now(tz), status='Успешно', answer='200', mailing=new_mailing)
@@ -102,22 +103,24 @@ class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
 class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForms
-    permission_required = 'mailing.change_mailing'
     success_url = reverse_lazy('mailing:list')
+    permission_required = 'mailing.change_mailing'
+
 
 
 class MailingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Mailing
-    permission_required = 'mailing.delete_mailing'
     success_url = reverse_lazy('mailing:list')
+    permission_required = 'mailing.delete_mailing'
+
 
 class MessageListView(ListView):
     model = Message
     template_name = 'mailing/message_list.html'
-    #context_object_name = 'messages'
+    queryset = Message.objects.all()
 
-    def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
+    #def get_queryset(self):
+    #    return super().get_queryset().filter(user=self.request.user)
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):

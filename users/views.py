@@ -13,16 +13,6 @@ class RegisterView(CreateView):
     template_name = 'users/register.html'
     success_url = reverse_lazy('users:login')
 
-    def form_valid(self, form):
-        user = form.save(commit=False)
-        user.save()
-        if form.is_valid():
-            my_group = Group.objects.get(name='manager_mailing')
-            my_group.user_set.add(user)
-
-        return super().form_valid(form)
-
-
 class ProfileView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserProfileForm

@@ -11,9 +11,10 @@ from client.models import Client
 class ClientListView(LoginRequiredMixin, ListView):
     model = Client
     template_name = 'client/client_list.html'
+    queryset = Client.objects.all()
 
-    def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
+    #def get_queryset(self):
+    #    return super().get_queryset().filter(user=self.request.user)
 
 
 class ClientDetailView(DetailView):
@@ -36,14 +37,15 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Client
     form_class = ClientForms
+    template_name = 'client/client_form.html'
     success_url = reverse_lazy('client:list')
-
+"""
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
         if self.object.user != self.request.user:
             raise Http404
         return self.object
-
+"""
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Client

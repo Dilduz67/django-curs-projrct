@@ -35,13 +35,11 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
             new_art.save()
         return super().form_valid(form)
 
-    def get_success_url(self):
-        return reverse('blog:view', args=[self.kwargs.get('pk')])
-
 
 class ArticleListView(LoginRequiredMixin, ListView):
     model = Article
     template_name = 'blog/article_list.html'
+    queryset = Article.objects.all()
 
 
 class ArticleDetailView(LoginRequiredMixin, DetailView):

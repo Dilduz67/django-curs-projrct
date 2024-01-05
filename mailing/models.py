@@ -6,7 +6,6 @@ from django.conf import settings
 class Message(models.Model):
     theme = models.CharField(max_length=150, verbose_name='тема сообщения')
     body = models.TextField(verbose_name='содержание')
-    #mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, **NULLABLE,)
     user = models.ForeignKey(User, verbose_name='пользователь', on_delete=models.CASCADE, **NULLABLE)
 
     def __str__(self):
@@ -33,7 +32,7 @@ class Mailing(models.Model):
     periodicity = models.PositiveSmallIntegerField(verbose_name="периодичность", choices=TITLE_CHOICES_PERIODICITY,
                                                    default=1)
     status = models.PositiveSmallIntegerField(verbose_name='статус рассылки', choices=TITLE_CHOICES_STATUS, default=1)
-    massage = models.ForeignKey(Message, on_delete=models.SET_NULL, **NULLABLE)
+    message = models.ForeignKey(Message, on_delete=models.SET_NULL, **NULLABLE,verbose_name='сообщение')
     user = models.ForeignKey(User, verbose_name='пользователь', on_delete=models.CASCADE, **NULLABLE)
 
     def __str__(self):
