@@ -24,7 +24,6 @@ def get_cache_version_for_article(article_pk):
     return article_list
 
 def swnd_mails(mailings):
-
     for mailing in mailings:
         now = datetime.datetime.now()
         for ms in Mailing.objects.filter(status=2):
